@@ -6,6 +6,7 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class JokeMapper {
+
     public String fromRaw(JokeTwoPart joke) {
         return joke.getSetup() + "      " + joke.getDelivery();
     }

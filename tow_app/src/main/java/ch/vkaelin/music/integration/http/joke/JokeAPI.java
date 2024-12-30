@@ -18,7 +18,7 @@ public interface JokeAPI {
 
     static JokeAPI build() {
         return Feign.builder()
-                .decoder(new JokeGsonDecoder())
-                .target(JokeAPI.class, "https://v2.jokeapi.dev");
+            .decoder(new JokeGsonDecoder())
+            .target(JokeAPI.class, "https://v2.jokeapi.dev");
     }
 }

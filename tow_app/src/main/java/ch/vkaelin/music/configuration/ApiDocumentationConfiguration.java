@@ -9,14 +9,13 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenAPIDefinition(
-        info = @Info(title = "Music Library API", version = "v1"),
-        security = @SecurityRequirement(name = "bearerAuth")
+    info = @Info(title = "Music Library API", version = "v1"),
+    security = @SecurityRequirement(name = "bearerAuth")
 )
 @SecurityScheme(
-        name = "bearerAuth",
-        type = SecuritySchemeType.HTTP,
-        bearerFormat = "JWT",
-        scheme = "bearer"
+    name = "bearerAuth",
+    type = SecuritySchemeType.HTTP,
+    bearerFormat = "JWT",
+    scheme = "bearer"
 )
-public class ApiDocumentationConfiguration {
-}
+public class ApiDocumentationConfiguration {}

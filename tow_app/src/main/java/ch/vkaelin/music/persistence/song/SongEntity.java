@@ -20,6 +20,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "songs")
 public class SongEntity extends AbstractEntity {
+
     @Column(nullable = false)
     private String name;
 
@@ -29,8 +30,9 @@ public class SongEntity extends AbstractEntity {
     @Column(nullable = false)
     private String genre;
 
-
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE})
+    @ManyToOne(
+        cascade = { CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE }
+    )
     @JoinColumn(name = "artist_id")
     private ArtistEntity artist;
 }

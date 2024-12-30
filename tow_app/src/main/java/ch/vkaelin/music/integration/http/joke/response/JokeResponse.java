@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public abstract class JokeResponse {
+
     private boolean error;
     private String category;
     private String type;

@@ -2,9 +2,8 @@ package ch.vkaelin.music.api.song;
 
 import ch.vkaelin.music.domain.song.NewSongRequest;
 import ch.vkaelin.music.domain.song.Song;
-import org.mapstruct.Mapper;
-
 import java.util.List;
+import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface SongMapper {

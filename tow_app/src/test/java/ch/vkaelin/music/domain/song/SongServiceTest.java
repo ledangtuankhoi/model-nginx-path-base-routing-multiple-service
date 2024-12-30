@@ -1,7 +1,17 @@
 package ch.vkaelin.music.domain.song;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import ch.vkaelin.music.domain.artist.Artist;
 import ch.vkaelin.music.domain.file.FileAdapter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -11,20 +21,11 @@ import org.springframework.core.io.InputStreamSource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 class SongServiceTest {
+
     @Mock
     SongStorage songStorage;
+
     @Mock
     FileAdapter fileAdapter;
 
@@ -42,31 +43,34 @@ class SongServiceTest {
         String songName = "Best Song Ever";
         String genre = "Pop";
         MultipartFile multipartFile = new MockMultipartFile(
-                "file",
-                "test.mp3",
-                "audio/mpeg",
-                "test content".getBytes()
+            "file",
+            "test.mp3",
+            "audio/mpeg",
+            "test content".getBytes()
         );
         NewSongRequest request = new NewSongRequest(
-                songName,
-                genre,
-                multipartFile
+            songName,
+            genre,
+            multipartFile
         );
-        Artist artist = Artist.builder()
-                .artistName("Bob")
-                .id(1)
-                .build();
+        Artist artist = Artist.builder().artistName("Bob").id(1).build();
 
         // When I create a song
-        when(songStorage.save(any(Song.class))).thenAnswer(i -> i.getArgument(0));
-        when(fileAdapter.getStream(any(InputStreamSource.class))).thenReturn(multipartFile.getInputStream());
+        when(songStorage.save(any(Song.class))).thenAnswer(i -> i.getArgument(0)
+        );
+        when(fileAdapter.getStream(any(InputStreamSource.class))).thenReturn(
+            multipartFile.getInputStream()
+        );
         Song song = songService.createSong(request, artist);
 
         // Then I should get a song object and the song should be saved
         assertEquals(songName, song.getName());
         assertEquals(genre, song.getGenre());
         assertEquals(artist, song.getArtist());
-        verify(fileAdapter, times(1)).save(any(String.class), any(InputStream.class));
+        verify(fileAdapter, times(1)).save(
+            any(String.class),
+            any(InputStream.class)
+        );
     }
 
     @Test
@@ -76,9 +80,7 @@ class SongServiceTest {
 
         // When I search for a song
         when(songStorage.findById(id)).thenReturn(
-                Optional.of(
-                        Song.builder().id(id).build()
-                )
+            Optional.of(Song.builder().id(id).build())
         );
 
         // Then I should get the song back
@@ -95,6 +97,7 @@ class SongServiceTest {
         when(songStorage.findById(id)).thenReturn(Optional.empty());
 
         // Then I should get an exception
-        assertThrows(SongNotFoundException.class, () -> songService.findById(id));
+        assertThrows(SongNotFoundException.class, () -> songService.findById(id)
+        );
     }
 }

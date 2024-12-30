@@ -1,12 +1,12 @@
 package ch.vkaelin.music.integration.mail;
 
 import jakarta.mail.Session;
-import org.springframework.stereotype.Component;
-
 import java.util.Properties;
+import org.springframework.stereotype.Component;
 
 @Component
 public class LocalMailService extends MailService {
+
     @Override
     public Properties getProperties() {
         Properties prop = new Properties();

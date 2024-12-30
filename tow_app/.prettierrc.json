@@ -1,0 +1,15 @@
+{
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true,
+    "plugins": [
+        "prettier-plugin-java",
+        "@prettier/plugin-php",
+        "@prettier/plugin-xml",
+        "prettier",
+        "prettier-plugin-java",
+        "prettier-plugin-sql",
+        "@stedi/prettier-plugin-jsonata"
+    ]
+}

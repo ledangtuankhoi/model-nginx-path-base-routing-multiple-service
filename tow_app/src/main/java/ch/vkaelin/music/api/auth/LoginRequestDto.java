@@ -5,6 +5,7 @@ import lombok.Value;
 
 @Value
 public class LoginRequestDto {
+
     @NotBlank(message = "Username is required")
     String username;
 

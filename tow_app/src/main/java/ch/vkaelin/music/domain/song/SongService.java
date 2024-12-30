@@ -4,26 +4,26 @@ import ch.vkaelin.music.domain.artist.Artist;
 import ch.vkaelin.music.domain.file.FileAdapter;
 import ch.vkaelin.music.domain.file.FileAdapterException;
 import ch.vkaelin.music.domain.file.InvalidFileTypeException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class SongService {
+
     private final SongStorage songStorage;
     private final FileAdapter fileAdapter;
     public static final String AUDIO_MPEG = "audio/mpeg";
 
     @Transactional
     public Song createSong(NewSongRequest request, Artist artist)
-            throws FileAdapterException, InvalidFileTypeException {
+        throws FileAdapterException, InvalidFileTypeException {
         if (!Objects.equals(request.getFile().getContentType(), AUDIO_MPEG)) {
             throw new InvalidFileTypeException("File must be a mp3 file");
         }
@@ -32,18 +32,17 @@ public class SongService {
         fileAdapter.save(fileName, fileAdapter.getStream(request.getFile()));
 
         Song song = Song.builder()
-                .name(request.getName())
-                .genre(request.getGenre())
-                .file(fileName)
-                .artist(artist)
-                .build();
+            .name(request.getName())
+            .genre(request.getGenre())
+            .file(fileName)
+            .artist(artist)
+            .build();
 
         return songStorage.save(song);
     }
 
     public Song findById(Integer id) throws SongNotFoundException {
-        return songStorage.findById(id)
-                .orElseThrow(SongNotFoundException::new);
+        return songStorage.findById(id).orElseThrow(SongNotFoundException::new);
     }
 
     public InputStream loadSong(String fileName) throws FileAdapterException {

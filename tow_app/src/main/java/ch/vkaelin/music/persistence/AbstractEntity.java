@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter
 @MappedSuperclass
 public abstract class AbstractEntity {
+
     @Id
     @GeneratedValue
     private Integer id;

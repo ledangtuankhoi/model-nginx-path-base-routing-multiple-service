@@ -6,6 +6,7 @@ import lombok.Value;
 
 @Value
 public class AuthResponseDto {
+
     String token;
     String joke = JokeMapper.fromRaw(JokeAPI.build().getTwoPartJoke());
 }

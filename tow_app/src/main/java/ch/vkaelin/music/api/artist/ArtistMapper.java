@@ -1,9 +1,8 @@
 package ch.vkaelin.music.api.artist;
 
 import ch.vkaelin.music.domain.artist.Artist;
-import org.mapstruct.Mapper;
-
 import java.util.List;
+import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface ArtistMapper {
@@ -11,4 +10,3 @@ public interface ArtistMapper {
 
     List<SearchedArtistDto> toSearchedArtistDto(List<Artist> artists);
 }
-

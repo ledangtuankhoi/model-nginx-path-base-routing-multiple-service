@@ -6,6 +6,8 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,13 +28,11 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity()
+@EnableMethodSecurity
 public class SecurityConfiguration {
+
     @Value("${config.jwt.public.key}")
     RSAPublicKey publicKey;
 
@@ -40,31 +40,38 @@ public class SecurityConfiguration {
     RSAPrivateKey privateKey;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http)
+        throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                HttpMethod.GET, "/api/v1/songs/**"
-                        )
-                        .permitAll()
-                        .requestMatchers(
-                                "/api/v1/artists",
-                                "/api/v1/auth/**",
-                                "/swagger-ui/**",
-                                "/api-docs/**"
-                        )
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated())
-                .httpBasic(Customizer.withDefaults())
-                .oauth2ResourceServer(config -> config.jwt(Customizer.withDefaults()))
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(exceptions -> exceptions
-                        .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-                        .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
-                );
-
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth ->
+                auth
+                    .requestMatchers(HttpMethod.GET, "/api/v1/songs/**")
+                    .permitAll()
+                    .requestMatchers(
+                        "/api/v1/artists",
+                        "/api/v1/auth/**",
+                        "/swagger-ui/**",
+                        "/api-docs/**"
+                    )
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated()
+            )
+            .httpBasic(Customizer.withDefaults())
+            .oauth2ResourceServer(config ->
+                config.jwt(Customizer.withDefaults())
+            )
+            .sessionManagement(sess ->
+                sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            .exceptionHandling(exceptions ->
+                exceptions
+                    .authenticationEntryPoint(
+                        new BearerTokenAuthenticationEntryPoint()
+                    )
+                    .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
+            );
 
         return http.build();
     }
@@ -77,17 +84,23 @@ public class SecurityConfiguration {
     @Bean
     JwtEncoder jwtEncoder() {
         JWK jwk = new RSAKey.Builder(publicKey).privateKey(privateKey).build();
-        JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
+        JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(
+            new JWKSet(jwk)
+        );
         return new NimbusJwtEncoder(jwks);
     }
 
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter =
+            new JwtGrantedAuthoritiesConverter();
         grantedAuthoritiesConverter.setAuthorityPrefix("");
 
-        JwtAuthenticationConverter authConverter = new JwtAuthenticationConverter();
-        authConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+        JwtAuthenticationConverter authConverter =
+            new JwtAuthenticationConverter();
+        authConverter.setJwtGrantedAuthoritiesConverter(
+            grantedAuthoritiesConverter
+        );
         return authConverter;
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AuthenticationService {
+
     private final ArtistStorage artistStorage;
     private final UserStorage userStorage;
     private final PasswordEncoder passwordEncoder;
@@ -25,15 +26,15 @@ public class AuthenticationService {
     @Transactional
     public String register(SignUpRequest request) {
         User user = User.builder()
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.ARTIST)
-                .build();
+            .username(request.getUsername())
+            .password(passwordEncoder.encode(request.getPassword()))
+            .role(Role.ARTIST)
+            .build();
 
         Artist artist = Artist.builder()
-                .artistName(request.getArtistName())
-                .user(user)
-                .build();
+            .artistName(request.getArtistName())
+            .user(user)
+            .build();
 
         try {
             artistStorage.save(artist);
@@ -46,13 +47,15 @@ public class AuthenticationService {
 
     public String authenticate(AuthRequest request) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
+            new UsernamePasswordAuthenticationToken(
+                request.getUsername(),
+                request.getPassword()
+            )
         );
 
-        User user = userStorage.findByUsername(request.getUsername()).orElseThrow();
+        User user = userStorage
+            .findByUsername(request.getUsername())
+            .orElseThrow();
         return jwtService.generateToken(user);
     }
 }

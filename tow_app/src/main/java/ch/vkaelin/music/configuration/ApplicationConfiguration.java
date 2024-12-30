@@ -20,24 +20,32 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfiguration {
+
     private final UserStorage userStorage;
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> userStorage.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return username ->
+            userStorage
+                .findByUsername(username)
+                .orElseThrow(() ->
+                    new UsernameNotFoundException("User not found")
+                );
     }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        DaoAuthenticationProvider authProvider =
+            new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    public AuthenticationManager authenticationManager(
+        AuthenticationConfiguration config
+    ) throws Exception {
         return config.getAuthenticationManager();
     }
 
@@ -49,17 +57,17 @@ public class ApplicationConfiguration {
     @Bean
     CommandLineRunner initDatabase(UserRepository userRepository) {
         if (userRepository.findByUsername("admin").isPresent()) {
-            return args -> {
-            };
+            return args -> {};
         }
 
-        return args -> userRepository.save(
+        return args ->
+            userRepository.save(
                 new UserEntity(
-                        "admin",
-                        passwordEncoder().encode("password"),
-                        Role.ADMIN,
-                        null
+                    "admin",
+                    passwordEncoder().encode("password"),
+                    Role.ADMIN,
+                    null
                 )
-        );
+            );
     }
 }

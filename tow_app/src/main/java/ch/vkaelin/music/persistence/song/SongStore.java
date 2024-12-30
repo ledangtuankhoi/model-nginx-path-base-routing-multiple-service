@@ -2,15 +2,15 @@ package ch.vkaelin.music.persistence.song;
 
 import ch.vkaelin.music.domain.song.Song;
 import ch.vkaelin.music.domain.song.SongStorage;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class SongStore implements SongStorage {
+
     private final SongRepository songRepository;
     private final SongEntityMapper songEntityMapper;
 
@@ -29,8 +29,9 @@ public class SongStore implements SongStorage {
     @Override
     public List<Song> search(String search) {
         List<SongEntity> songEntities = songRepository.search(search);
-        return songEntities.stream()
-                .map(songEntityMapper::toDomainWithArtist)
-                .toList();
+        return songEntities
+            .stream()
+            .map(songEntityMapper::toDomainWithArtist)
+            .toList();
     }
 }

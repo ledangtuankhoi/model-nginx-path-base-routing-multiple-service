@@ -2,28 +2,30 @@ package ch.vkaelin.music.persistence.artist;
 
 import ch.vkaelin.music.domain.artist.Artist;
 import ch.vkaelin.music.domain.artist.ArtistStorage;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class ArtistStore implements ArtistStorage {
+
     private final ArtistRepository artistRepository;
     private final ArtistEntityMapper artistEntityMapper;
 
     @Override
     public Optional<Artist> findById(Integer id) {
-        return artistRepository.findById(id)
-                .map(artistEntityMapper::toDomainWithSongs);
+        return artistRepository
+            .findById(id)
+            .map(artistEntityMapper::toDomainWithSongs);
     }
 
     @Override
     public Optional<Artist> findByUsername(String username) {
-        return artistRepository.findByUserUsername(username)
-                .map(artistEntityMapper::toDomain);
+        return artistRepository
+            .findByUserUsername(username)
+            .map(artistEntityMapper::toDomain);
     }
 
     @Override
@@ -35,9 +37,11 @@ public class ArtistStore implements ArtistStorage {
 
     @Override
     public List<Artist> searchArtists(String search) {
-        return artistRepository.search(search).stream()
-                .map(artistEntityMapper::toDomainWithSongs)
-                .toList();
+        return artistRepository
+            .search(search)
+            .stream()
+            .map(artistEntityMapper::toDomainWithSongs)
+            .toList();
     }
 
     @Override
@@ -45,5 +49,3 @@ public class ArtistStore implements ArtistStorage {
         artistRepository.deleteById(id);
     }
 }
-
-

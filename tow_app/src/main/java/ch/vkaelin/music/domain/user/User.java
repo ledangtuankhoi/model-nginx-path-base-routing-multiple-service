@@ -1,6 +1,8 @@
 package ch.vkaelin.music.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Collection;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,13 +10,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-
 @Data
 @Builder
 @AllArgsConstructor
 public class User implements UserDetails {
+
     private final Integer id;
     private final String username;
     private final String password;

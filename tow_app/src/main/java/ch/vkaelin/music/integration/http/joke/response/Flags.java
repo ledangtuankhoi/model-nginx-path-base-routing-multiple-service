@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class Flags {
+
     private boolean nsfw;
     private boolean religious;
     private boolean political;

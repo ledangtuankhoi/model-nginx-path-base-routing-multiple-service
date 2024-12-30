@@ -1,0 +1,19 @@
+{
+  "name": "sshuser_data",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@prettier/plugin-php": "^0.22.2",
+    "@prettier/plugin-xml": "^3.4.1",
+    "@stedi/prettier-plugin-jsonata": "^2.1.3",
+    "prettier": "^3.4.2",
+    "prettier-plugin-java": "^2.6.5",
+    "prettier-plugin-sql": "^0.18.1"
+  }
+}

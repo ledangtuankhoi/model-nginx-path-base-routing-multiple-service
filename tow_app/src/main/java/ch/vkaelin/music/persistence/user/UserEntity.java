@@ -22,6 +22,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "users")
 public class UserEntity extends AbstractEntity {
+
     @Column(nullable = false, unique = true)
     private String username;
 

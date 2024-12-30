@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class NewUserMail {
+
     private final MailService mailService;
 
     public void sendMail(String username) {

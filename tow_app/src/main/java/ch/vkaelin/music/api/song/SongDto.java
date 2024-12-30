@@ -4,6 +4,7 @@ import lombok.Value;
 
 @Value
 public class SongDto {
+
     Integer id;
     String name;
     String genre;

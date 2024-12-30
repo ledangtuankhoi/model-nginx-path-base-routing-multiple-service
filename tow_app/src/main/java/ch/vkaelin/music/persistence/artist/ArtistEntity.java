@@ -10,12 +10,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -24,6 +23,7 @@ import java.util.List;
 @Entity
 @Table(name = "artists")
 public class ArtistEntity extends AbstractEntity {
+
     @Column(nullable = false)
     private String artistName;
 
@@ -31,6 +31,9 @@ public class ArtistEntity extends AbstractEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @OneToMany(mappedBy = "artist", cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE})
+    @OneToMany(
+        mappedBy = "artist",
+        cascade = { CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE }
+    )
     private List<SongEntity> songs;
 }

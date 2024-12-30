@@ -2,14 +2,14 @@ package ch.vkaelin.music.persistence.user;
 
 import ch.vkaelin.music.domain.user.User;
 import ch.vkaelin.music.domain.user.UserStorage;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class UserStore implements UserStorage {
+
     private final UserRepository userRepository;
     private final UserEntityMapper userEntityMapper;
 
