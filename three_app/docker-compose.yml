@@ -1,0 +1,63 @@
+services:
+  db:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_DB: music
+      POSTGRES_USER: vkaelin
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+    volumes:
+      - db:/data/postgres
+    ports:
+      - "5332:5432"
+    networks:
+      - app-network
+    restart: unless-stopped
+  smtp4dev:
+    image: rnwood/smtp4dev:v3
+    restart: always
+    ports:
+      # Web interface
+      - '5000:80'
+      # SMTP server
+      - '2525:25'
+      # IMAP server
+      - '1443:143'
+    volumes:
+      - smtp4dev-data:/smtp4dev
+    environment:
+      # Specifies the server hostname. Used in auto-generated TLS certificate if enabled.
+      - ServerOptions__HostName=smtp4dev
+
+      # Other options: https://github.com/rnwood/smtp4dev/blob/master/docker-compose.yml
+    networks:
+      - app-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080" # Expose Spring Boot on port 8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/music
+      SPRING_DATASOURCE_USERNAME: vkaelin
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_MAIL_HOST: smtp4dev
+      SPRING_MAIL_PORT: 2525
+    networks:
+      - app-network
+    depends_on:
+      - db
+      - smtp4dev
+    restart: always
+networks:
+  db:
+    driver: bridge
+  app-network:
+    driver: bridge
+
+volumes:
+  db:
+  smtp4dev-data:
